@@ -6,6 +6,7 @@ class Solution {
 		Scanner sc = new Scanner(System.in);
 
 		int T = sc.nextInt();
+
 		for (int tc = 1; tc <= T; tc++) {
 
 			int M1 = sc.nextInt();
@@ -16,19 +17,23 @@ class Solution {
 
 			int[] Month = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-			int sumM1 = 0;
+			int sum1 = 0;
+
 			for (int i = 0; i < M1 - 1; i++) {
-				sumM1 += Month[i];
+				sum1 += Month[i];
 			}
 
-			int sumM2 = 0;
+			sum1 += D1;
+
+			int sum2 = 0;
+
 			for (int i = 0; i < M2 - 1; i++) {
-				sumM2 += Month[i];
+				sum2 += Month[i];
 			}
 
-			int result = (sumM2 - sumM1) + (D2 - D1) + 1;
+			sum2 += D2;
 
-			System.out.println("#" + tc + " " + result);
+			System.out.println("#" + tc + " " + (sum2 - sum1 + 1));
 		}
 	}
 }
