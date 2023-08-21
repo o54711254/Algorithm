@@ -1,31 +1,40 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Solution {
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		StringBuilder sb = new StringBuilder();
 
-		int T = sc.nextInt();
+		int T = Integer.parseInt(br.readLine());
 
 		for (int tc = 1; tc <= T; tc++) {
 
-			int N = sc.nextInt();
-			int M = sc.nextInt();
-			int K = sc.nextInt();
+			st = new StringTokenizer(br.readLine());
+
+			int N = Integer.parseInt(st.nextToken());
+			int M = Integer.parseInt(st.nextToken());
+			int K = Integer.parseInt(st.nextToken());
+
+			st = new StringTokenizer(br.readLine());
 
 			int[] arr = new int[N];
 
 			for (int i = 0; i < N; i++) {
-				arr[i] = sc.nextInt();
+				arr[i] = Integer.parseInt(st.nextToken());
 			}
 
 			Arrays.sort(arr);
-			int result = 0;
+			
 			int count = 0;
 			int idx = 0;
-
+			int result = 0;
 			for (int i = 0; i <= arr[N - 1]; i++) {
-				if (i >= 1 && i % M == 0) {
+				if (i > 0 && i % M == 0) {
 					count += K;
 				}
 				if (arr[idx] == i) {
@@ -37,13 +46,14 @@ public class Solution {
 					}
 				}
 			}
-
 			if (result >= 1) {
-				System.out.println("#" + tc + " " + "Impossible");
+				sb.append("#" + tc + " " + "Impossible");
 			} else {
-				System.out.println("#" + tc + " " + "Possible");
+				sb.append("#" + tc + " " + "Possible");
 			}
+			sb.append("\n");
 
 		}
+		System.out.println(sb);
 	}
 }
