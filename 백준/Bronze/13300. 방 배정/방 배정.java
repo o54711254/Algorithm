@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,22 +19,24 @@ public class Main {
 
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
-			arr[Integer.parseInt(st.nextToken())][Integer.parseInt(st.nextToken())]++;
+			int sex = Integer.parseInt(st.nextToken());
+			int grade = Integer.parseInt(st.nextToken());
+			arr[sex][grade]++;
 		}
 
-		int sum = 0;
+		int count = 0;
 		for (int i = 0; i < arr.length; i++) {
 			for (int j = 0; j < arr[0].length; j++) {
 				if (arr[i][j] == 1) {
-					sum++;
-				} else if (arr[i][j] % K == 0) {
-					sum += arr[i][j]/K;
-				}else if(arr[i][j] % K ==1) {
-					sum += arr[i][j]/K;
-					sum++;
+					count++;
+				} else if (arr[i][j] > 1) {
+					count += (arr[i][j] / K) + (arr[i][j] % K);
+				}else {
+					continue;
 				}
 			}
 		}
-		System.out.println(sum);
+		System.out.println(count);
+
 	}
 }
