@@ -1,77 +1,77 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.StringTokenizer;
 
 public class Main {
+	// 그래프 생성
+	static ArrayList<ArrayList<Integer>> graph = new ArrayList<ArrayList<Integer>>();
+	// 방문확인용 배열
+	static int[] check;
+	// 방문 순서
+	static int count;
 
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static StringTokenizer st;
-    static StringBuilder sb = new StringBuilder();
-    
-    static ArrayList<ArrayList<Integer>> graph = new ArrayList<>(); // 정점들의 정보를 기록할 그래프
-    static int[] check; // 방문한 정점을 기록할 배열
-    static int count; // 방문 순서
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
 
-    public static void main(String[] args) throws IOException {
+		st = new StringTokenizer(br.readLine());
+		// 정점의 수
+		int N = Integer.parseInt(st.nextToken());
+		// 간선의 수
+		int M = Integer.parseInt(st.nextToken());
+		// 시작 정점
+		int R = Integer.parseInt(st.nextToken());
 
-        st = new StringTokenizer(br.readLine());
+		check = new int[N + 1];
 
-        int vertex = Integer.parseInt(st.nextToken());
-        int edge = Integer.parseInt(st.nextToken());
-        int startVertex = Integer.parseInt(st.nextToken());
+		for (int i = 0; i < N + 1; i++) {
+			// 정점 생성
+			graph.add(new ArrayList<Integer>());
+		}
 
-		// 방문한 정점이 최대 정점의 개수만큼 있기 때문에, 정점의 개수만큼의 크기로 배열 생성
-        // index 혼란을 방지하고자 0번 인덱스를 더미 데이터로 활용
-        check = new int[vertex+1];
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			// 출발
+			int u = Integer.parseInt(st.nextToken());
+			// 도착
+			int v = Integer.parseInt(st.nextToken());
 
-		// graph의 index를 정점의 개수만큼 만들어줌
-        for(int i =0; i < vertex+1; i++) {
-            graph.add(new ArrayList<>());
-        }
+			// 값 넣어줌
+			graph.get(u).add(v);
+			// 무방향이므로 반대로도 넣어줌
+			graph.get(v).add(u);
+		}
 
-        for(int i = 0; i < edge; i++) {
-            st = new StringTokenizer(br.readLine());
-            int fromVertex = Integer.parseInt(st.nextToken());
-            int toVertex = Integer.parseInt(st.nextToken());
+		for (int i = 1; i < graph.size(); i++) {
+			Collections.sort(graph.get(i));
+		}
 
-			// 무방향이기 때문에 양쪽으로 정보를 추가
-            graph.get(fromVertex).add(toVertex);
-            graph.get(toVertex).add(fromVertex);
-        }
-		
-        // 오름차순을 위해 정렬
-        for(int i = 1; i < graph.size(); i++) {
-            Collections.sort(graph.get(i));
-        }
+		count = 1;
 
-		// 시작 정점도 순서에 포함이므로 count 초기값 1 할당
-        count = 1;
-        
-        // 깊이 우선 탐색 재귀 시작
-        dfs(startVertex);
+		dfs(R);
 
-		// 각 인덱스별로 방문 순서가 기록된 배열을 순회하며, 값을 StringBuilder에 저장
-        for(int i = 1; i < check.length; i++) {
-            sb.append(check[i]).append("\n");
-        }
-        System.out.println(sb);
-    }
-    
-	// 깊이 우선 탐색 메서드
-    private static void dfs(int vertex) {
-        check[vertex] = count; // 현재 방문하고있는 정점에 순서 저장
+		StringBuilder sb = new StringBuilder();
 
-			// 현재 위치한 정점이 갈 수 있는 정점 리스트를 순회
-            for(int i = 0; i < graph.get(vertex).size(); i++) {
-                int newVertex = graph.get(vertex).get(i);
-                
-                //다음 갈 정점을 방문했었는지 체크(0일 경우 방문 X)
-                if(check[newVertex] == 0){
-                    count++;
-                    dfs(newVertex);
-                }
-            }
-    }
+		for (int i = 1; i < check.length; i++) {
+			sb.append(check[i]).append("\n");
+		}
+		System.out.println(sb);
+
+	}
+
+	public static void dfs(int vertex) {
+		check[vertex] = count;
+
+		for (int i = 0; i < graph.get(vertex).size(); i++) {
+			int newVertex = graph.get(vertex).get(i);
+
+			if (check[newVertex] == 0) {
+				count++;
+				dfs(newVertex);
+			}
+		}
+	}
 }
