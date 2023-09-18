@@ -38,7 +38,7 @@ public class Main {
 			for (int i = 0; i < r; i++) {
 				for (int j = 0; j < c; j++) {
 					if (map[i][j] == 1 && !visit[i][j]) {
-						bfs(new Point(i, j));
+						dfs(new Point(i, j));
 						count++;
 					}
 				}
@@ -48,25 +48,20 @@ public class Main {
 		}
 	}
 
-	public static void bfs(Point p) {
-		Queue<Point> queue = new LinkedList<Point>();
-		queue.add(p);
+	public static void dfs(Point p) {
 		visit[p.x][p.y] = true;
 
 		int r = map.length;
 		int c = map[0].length;
 
-		while (!queue.isEmpty()) {
-			Point now = queue.poll();
-			for (int i = 0; i < 8; i++) {
-				int nr = now.x + dr[i];
-				int nc = now.y + dc[i];
-				if (nr < 0 || nc < 0 || nr >= r || nc >= c || map[nr][nc] == 0 || visit[nr][nc]) {
-					continue;
-				}
-				queue.add(new Point(nr, nc));
-				visit[nr][nc] = true;
+		for (int i = 0; i < 8; i++) {
+			int nr = p.x + dr[i];
+			int nc = p.y + dc[i];
+			if (nr < 0 || nc < 0 || nr >= r || nc >= c || map[nr][nc] == 0 || visit[nr][nc]) {
+				continue;
 			}
+			dfs(new Point(nr, nc));
+
 		}
 	}
 }
