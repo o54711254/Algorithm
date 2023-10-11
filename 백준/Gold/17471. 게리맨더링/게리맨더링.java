@@ -8,50 +8,55 @@ import java.util.StringTokenizer;
 
 public class Main {
 	static int N;
-	static int result = Integer.MAX_VALUE;
 	static int[] people;
 	static boolean[] select;
 	static boolean[] visit;
 	static ArrayList<ArrayList<Integer>> graph;
+	static int result = Integer.MAX_VALUE;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
 
 		N = Integer.parseInt(br.readLine());
+		graph = new ArrayList<ArrayList<Integer>>();
+		for (int i = 0; i < N + 1; i++) {
+			graph.add(new ArrayList<Integer>());
+		}
+		// 인구수 배열
+		people = new int[N + 1];
+		// 구역 나누는데 쓰일 체크 배열
+		select = new boolean[N + 1];
+		// bfs용 visit배열
+		visit = new boolean[N + 1];
 
-		people = new int[N];
-		select = new boolean[N];
-
+		// 인구수 입력
 		st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < N; i++) {
+		for (int i = 1; i < N + 1; i++) {
 			people[i] = Integer.parseInt(st.nextToken());
 		}
 
-		graph = new ArrayList<ArrayList<Integer>>();
-		for (int i = 0; i < N; i++) {
-			graph.add(new ArrayList<Integer>());
-		}
-
-		for (int i = 0; i < N; i++) {
+		// 그래프 입력
+		for (int i = 1; i < N + 1; i++) {
 			st = new StringTokenizer(br.readLine());
 			int cnt = Integer.parseInt(st.nextToken());
 			for (int j = 0; j < cnt; j++) {
 				int num = Integer.parseInt(st.nextToken());
-				graph.get(i).add(num - 1);
+				graph.get(i).add(num);
 			}
 		}
-		dfs(0);
-		if (result == Integer.MAX_VALUE)
+		dfs(1);
+		if (result == Integer.MAX_VALUE) {
 			result = -1;
+		}
 		System.out.println(result);
 	}
 
 	static void dfs(int depth) {
-		if (depth == N) {
+		if (depth == N + 1) {
 			ArrayList<Integer> aList = new ArrayList<Integer>();
 			ArrayList<Integer> bList = new ArrayList<Integer>();
-			for (int i = 0; i < N; i++) {
+			for (int i = 1; i <= N; i++) {
 				if (select[i]) {
 					aList.add(i);
 				} else {
@@ -74,7 +79,7 @@ public class Main {
 
 	static boolean bfs(ArrayList<Integer> list) {
 		Queue<Integer> queue = new LinkedList<Integer>();
-		visit = new boolean[N];
+		visit = new boolean[N + 1];
 		visit[list.get(0)] = true;
 		queue.add(list.get(0));
 
@@ -83,11 +88,12 @@ public class Main {
 			int now = queue.poll();
 			for (int i = 0; i < graph.get(now).size(); i++) {
 				int next = graph.get(now).get(i);
-				if (list.contains(next) && !visit[next]) {
-					queue.add(next);
-					visit[next] = true;
-					count++;
+				if (!list.contains(next) || visit[next]) {
+					continue;
 				}
+				queue.add(next);
+				visit[next] = true;
+				count++;
 			}
 		}
 		if (count == list.size()) {
@@ -100,7 +106,7 @@ public class Main {
 	static void getDiff() {
 		int a = 0;
 		int b = 0;
-		for (int i = 0; i < N; i++) {
+		for (int i = 1; i <= N; i++) {
 			if (select[i]) {
 				a += people[i];
 			} else {
