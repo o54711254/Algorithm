@@ -117,7 +117,10 @@ public class Main {
 
 		int nr = r, nc = c;
 		int dist = 0;
-		while (map[nr + dr[d]][nc + dc[d]] != '#' && map[nr][nc] != 'O') {
+		while (true) {
+			if (map[nr + dr[d]][nc + dc[d]] == '#' || map[nr][nc] == 'O') {
+				break;
+			}
 			nr += dr[d];
 			nc += dc[d];
 			dist++;
