@@ -3,86 +3,77 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-class Node {
-	int v;
-	int w;
-
-	public Node(int v, int w) {
-		super();
-		this.v = v;
-		this.w = w;
-	}
-}
-
 public class Main {
-	static ArrayList<ArrayList<Node>> graph;
-	static boolean[] visit;
-	static int[] dist;
-	static final int INF = 200000000;
+	static int N, M;
+	static int start, end;
+	static int[][] map;
+	static long[] arr;
+	static boolean[] visited;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
+		StringTokenizer st = new StringTokenizer(br.readLine());
 
-		int N = Integer.parseInt(br.readLine());
-		int M = Integer.parseInt(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		st = new StringTokenizer(br.readLine());
+		M = Integer.parseInt(st.nextToken());
 
-		visit = new boolean[N + 1];
-		dist = new int[N + 1];
-		graph = new ArrayList<ArrayList<Node>>();
+		map = new int[N + 1][N + 1];
+
+		// 초기화
+		// 비용이 0보다 크거나 같으므로
 		for (int i = 0; i < N + 1; i++) {
-			graph.add(new ArrayList<Node>());
-			dist[i] = INF;
+			for (int j = 0; j < N + 1; j++) {
+				map[i][j] = Integer.MAX_VALUE;
+			}
 		}
 
 		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
-			int c = Integer.parseInt(st.nextToken());
+			int go = Integer.parseInt(st.nextToken()); // 출발 번호
+			int stop = Integer.parseInt(st.nextToken()); // 도착 번호
+			int pay = Integer.parseInt(st.nextToken()); // 비용
+			
+			// 같은 경로이면 비용이 더 적은걸로
+			map[go][stop] = Math.min(map[go][stop], pay);
 
-			graph.get(a).add(new Node(b, c));
-		}
+		} // 입력 끝
 
 		st = new StringTokenizer(br.readLine());
-		int start = Integer.parseInt(st.nextToken());
-		int end = Integer.parseInt(st.nextToken());
+		start = Integer.parseInt(st.nextToken());
+		end = Integer.parseInt(st.nextToken());
 
-		Dijkstra(new Node(start, 0));
+		arr = new long[N + 1]; // 최소 비용을 저장할 배열
+		Arrays.fill(arr, Integer.MAX_VALUE); // 배열을 최댓값으로 채우기
+		arr[start] = 0; // 출발점은 0으로
+		visited = new boolean[N + 1];
+		int cnt = 0;
 
-
-		System.out.println(dist[end]);
-
-	}
-
-	public static void Dijkstra(Node start) {
-		PriorityQueue<Node> queue = new PriorityQueue<Node>(new Comparator<Node>() {
-			@Override
-			public int compare(Node o1, Node o2) {
-				// TODO Auto-generated method stub
-				return o1.w - o2.w;
-			}
-		});
-
-		queue.add(start);
-		
-		while (!queue.isEmpty()) {
-			Node now = queue.poll();
-			if (!visit[now.v]) {
-				visit[now.v] = true;
-				dist[now.v] = now.w;
-				for (int i = 0; i < graph.get(now.v).size(); i++) {
-					Node next = graph.get(now.v).get(i);
-					if (dist[next.v] > dist[now.v] + next.w) {
-						dist[next.v] = dist[now.v] + next.w;
-						queue.add(new Node(next.v, dist[next.v]));
-					}
+		while (cnt < N) {
+			int min = Integer.MAX_VALUE;
+			int idx = 0;
+			for (int i = 0; i < N + 1; i++) {
+				if (!visited[i] && (arr[i] < min)) {
+					min = (int) arr[i];
+					idx = i;
 				}
 			}
+			
+			visited[idx] = true;
+			for (int i = 0; i < N + 1; i++) {
+				if (!visited[i] && map[idx][i] != Integer.MAX_VALUE && (arr[idx] + map[idx][i]) < arr[i]) {
+					arr[i] = arr[idx] + map[idx][i];
+				}
+			}
+
+			cnt++;
+
 		}
-	}
+
+		System.out.println(arr[end]);
+
+	}// main
+
 }
