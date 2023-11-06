@@ -1,24 +1,22 @@
 import java.util.Scanner;
 
 public class Main {
-	public static void main(String[] args) {
-
+	public static void main(String[] args) throws Exception {
 		Scanner sc = new Scanner(System.in);
-
-		int A = sc.nextInt();
-		int B = sc.nextInt();
+		int a = sc.nextInt();
+		int b = sc.nextInt();
 		
+		int mul = a * b;
 		
-		int i = 10000;
-		while(true) {
-			i--;
-			if(A%i==0&&B%i==0) {
-				System.out.println(i);
-				break;
-			}
+		while (b != 0) {
+			a = a % b;
+			int temp = a;
+			a = b;
+			b = temp;
 		}
-		int A2 = A/i;
-		int B2 = B/i;
-		System.out.println(i*A2*B2);
+		
+		System.out.println(a);
+		System.out.println((int) mul / a);
 	}
+	
 }
