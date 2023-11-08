@@ -1,45 +1,53 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static int[] arr;
-    public static boolean[] visit;
-    
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        
-        int N = sc.nextInt();
-        int M = sc.nextInt();
-        
-        arr = new int[M];
-        visit = new boolean[N];
-        
-        dfs(N,M,0);
-        
-        
-    }
-    
-    public static void dfs(int N, int M, int depth) {
-        //깊이가 끝까지 도달하면 출력한다. 모든 요소를
-        if(depth == M) {
-            for(int val : arr) {
-                System.out.print(val + " ");
-            }
-            System.out.println();
-            return;
-        }
-        
-        //처음 방문한 곳이 flase라면 true로 바꾸고 깊이를 i+1로 증가시킨다.
-        for (int i = 0; i < N; i++) {
-            if(!visit[i]) {
-                visit[i] = true;
-                arr[depth] = i +1;
-                //그 후 다시 depth를 1증가시켜 재귀를 돌린다.
-                dfs(N,M, depth+1);
-                // 돌린 후 원래 있던 자리는 false로 바꾼다.
-                
-                //간혹 depth + 1 이 아니라 depth++ 을 해줘서 틀리는 사람이 꽤 여럿 있는데, 이렇게 하면 dfs 재귀호출 다음 줄에 depth--을 해주지 않으면 안된다.
-                visit[i] = false;
-            }
-        }
-    }
+	static int[] arr;
+	static int[] result;
+	static boolean[] visit;
+	static int N, M;
+	static StringBuilder sb;
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+
+		st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+
+		arr = new int[N];
+		for (int i = 0; i < N; i++) {
+			arr[i] = i + 1;
+		}
+
+		result = new int[M];
+		visit = new boolean[N + 1];
+		sb = new StringBuilder();
+		permutation(0, M);
+
+		System.out.println(sb);
+
+	}
+
+	public static void permutation(int depth, int r) {
+		if (depth == r) {
+			for (int i = 0; i < r; i++) {
+				sb.append(result[i] + " ");
+			}
+			sb.append("\n");
+			return;
+		}
+
+		for (int i = 0; i < N; i++) {
+			if (!visit[i]) {
+				visit[i] = true;
+				result[depth] = arr[i];
+				permutation(depth + 1, r);
+				visit[i] = false;
+			}
+		}
+	}
 }
