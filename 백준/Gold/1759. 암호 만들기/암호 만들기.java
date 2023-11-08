@@ -48,18 +48,14 @@ public class Main {
 				}
 				sb.append("\n");
 				return;
-			}else {
+			} else {
 				return;
 			}
 		}
 
 		for (int i = start; i < M; i++) {
-			if (!visit[i]) {
-				visit[i] = true;
-				result[depth] = arr[i];
-				dfs(depth + 1, i);
-				visit[i] = false;
-			}
+			result[depth] = arr[i];
+			dfs(depth + 1, i+1);
 		}
 	}
 
