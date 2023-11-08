@@ -6,7 +6,8 @@ import java.util.StringTokenizer;
 public class Main {
 	static int[] arr;
 	static int[] result;
-	static boolean[] visited;
+	static boolean[] visit;
+	static int N, M;
 	static StringBuilder sb;
 
 	public static void main(String[] args) throws IOException {
@@ -14,36 +15,38 @@ public class Main {
 		StringTokenizer st;
 
 		st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken());
-		int M = Integer.parseInt(st.nextToken());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 
 		arr = new int[N];
 		for (int i = 0; i < N; i++) {
 			arr[i] = i + 1;
 		}
-		result = new int[M];
-		visited = new boolean[N];
 
+		result = new int[M];
+		visit = new boolean[N + 1];
 		sb = new StringBuilder();
-		combination(0, 0, M);
+		permutation(0,0, M);
+
 		System.out.println(sb);
+
 	}
 
-	public static void combination(int depth, int start, int r) {
+	public static void permutation(int depth, int start, int r) {
 		if (depth == r) {
 			for (int i = 0; i < r; i++) {
-				sb.append(result[i]+" ");
+				sb.append(result[i] + " ");
 			}
 			sb.append("\n");
 			return;
 		}
-		int size = arr.length;
-		for (int i = start; i < size; i++) {
-			if (!visited[i]) {
-				visited[i] = true;
+
+		for (int i = start; i < N; i++) {
+			if (!visit[i]) {
+				visit[i] = true;
 				result[depth] = arr[i];
-				combination(depth + 1, i + 1, r);
-				visited[i] = false;
+				permutation(depth + 1, i + 1, r);
+				visit[i] = false;
 			}
 		}
 	}
