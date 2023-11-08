@@ -1,13 +1,14 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int[] arr;
-	static int[] result;
-	static boolean[] visit;
 	static int N, M;
+	static int[] arr;
+	static boolean[] visit;
+	static int[] result;
 	static StringBuilder sb;
 
 	public static void main(String[] args) throws IOException {
@@ -19,22 +20,21 @@ public class Main {
 		M = Integer.parseInt(st.nextToken());
 
 		arr = new int[N];
+		visit = new boolean[N];
+		result = new int[N];
 		for (int i = 0; i < N; i++) {
 			arr[i] = i + 1;
 		}
 
-		result = new int[M];
-		visit = new boolean[N + 1];
 		sb = new StringBuilder();
-		permutation(0, M);
-
+		permutation(0);
 		System.out.println(sb);
 
 	}
 
-	public static void permutation(int depth, int r) {
-		if (depth == r) {
-			for (int i = 0; i < r; i++) {
+	static void permutation(int depth) {
+		if (depth == M) {
+			for (int i = 0; i < M; i++) {
 				sb.append(result[i] + " ");
 			}
 			sb.append("\n");
@@ -45,7 +45,7 @@ public class Main {
 			if (!visit[i]) {
 				visit[i] = true;
 				result[depth] = arr[i];
-				permutation(depth + 1, r);
+				permutation(depth + 1);
 				visit[i] = false;
 			}
 		}
