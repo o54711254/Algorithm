@@ -2,75 +2,97 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-class Node {
-	int v;
+class Edge {
+	int from;
+	int to;
 	int w;
 
-	public Node(int v, int w) {
+	public Edge(int from, int to, int w) {
 		super();
-		this.v = v;
+		this.from = from;
+		this.to = to;
 		this.w = w;
 	}
 }
 
 public class Main {
-	static ArrayList<ArrayList<Node>> graph;
-	static boolean[] visit;
-	static int sum;
+	static ArrayList<Edge> edgeList;
+	static int[] parent;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
 
+		edgeList = new ArrayList<Edge>();
+
 		st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
 
-		graph = new ArrayList<ArrayList<Node>>();
-		visit = new boolean[N + 1];
-		for (int i = 0; i < N + 1; i++) {
-			graph.add(new ArrayList<Node>());
+		parent = new int[N + 1];
+
+		for (int i = 1; i <= N; i++) {
+			parent[i] = i;
 		}
 
 		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
-			int A = Integer.parseInt(st.nextToken());
-			int B = Integer.parseInt(st.nextToken());
-			int C = Integer.parseInt(st.nextToken());
 
-			graph.get(A).add(new Node(B, C));
-			graph.get(B).add(new Node(A, C));
+			int u = Integer.parseInt(st.nextToken());
+			int v = Integer.parseInt(st.nextToken());
+			int w = Integer.parseInt(st.nextToken());
+
+			edgeList.add(new Edge(u, v, w));
 		}
-		sum = 0;
-		prim(new Node(1, 0));
-		System.out.println(sum);
-	}
 
-	public static void prim(Node start) {
-		PriorityQueue<Node> queue = new PriorityQueue<Node>(new Comparator<Node>() {
+		Collections.sort(edgeList, new Comparator<Edge>() {
 
 			@Override
-			public int compare(Node o1, Node o2) {
+			public int compare(Edge o1, Edge o2) {
 				// TODO Auto-generated method stub
 				return o1.w - o2.w;
 			}
 		});
-		queue.add(start);
 
-		while (!queue.isEmpty()) {
-			Node now = queue.poll();
-			if (!visit[now.v]) {
-				sum += now.w;
-				visit[now.v] = true;
-				for (int i = 0; i < graph.get(now.v).size(); i++) {
-					Node next = graph.get(now.v).get(i);
-					queue.add(next);
+		int sum = 0;
+		int count = 0;
+		for (int i = 0; i < M; i++) {
+			int a = edgeList.get(i).from;
+			int b = edgeList.get(i).to;
+
+			if (union(a, b)) {
+				sum += edgeList.get(i).w;
+				count++;
+				if (count == M - 1) {
+					break;
 				}
 			}
 		}
+		System.out.println(sum);
+	}
+
+	public static int find(int x) {
+		if (parent[x] == x) {
+			return x;
+		}
+		return parent[x] = find(parent[x]);
+	}
+
+	public static boolean union(int x, int y) {
+		x = find(x);
+		y = find(y);
+		if (x == y) {
+			return false;
+		}
+		if (x >= y) {
+			parent[x] = y;
+		} else {
+			parent[y] = x;
+		}
+		return true;
 	}
 }
