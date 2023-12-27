@@ -35,14 +35,15 @@ class Edge implements Comparable<Edge> {
 class Main {
     static ArrayList<Edge> edgeList;
     static int[] parents;
+    static int V, E,sum, count;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
         st = new StringTokenizer(br.readLine());
-        int V = Integer.parseInt(st.nextToken());
-        int E = Integer.parseInt(st.nextToken());
+        V = Integer.parseInt(st.nextToken());
+        E = Integer.parseInt(st.nextToken());
 
         edgeList = new ArrayList<>();
         parents = new int[V + 1];
@@ -59,10 +60,13 @@ class Main {
             edgeList.add(new Edge(A, B, C));
         }
 
+        Kruscal();
+        System.out.println(sum);
+    }
+
+    static void Kruscal() {
         Collections.sort(edgeList);
 
-        int sum = 0;
-        int count = 0;
         for (int i = 0; i < E; i++) {
             int a = edgeList.get(i).from;
             int b = edgeList.get(i).to;
@@ -74,7 +78,6 @@ class Main {
                 break;
             }
         }
-        System.out.println(sum);
     }
 
     public static int find(int x) {
