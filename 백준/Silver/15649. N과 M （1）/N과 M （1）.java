@@ -1,14 +1,12 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-public class Main {
-	static int N, M;
+class Main {
+	static int N;
+	static int M;
+	static boolean[] check;
 	static int[] arr;
-	static boolean[] visit;
-	static int[] result;
+	static int[] tmp;
 	static StringBuilder sb;
 
 	public static void main(String[] args) throws IOException {
@@ -20,14 +18,18 @@ public class Main {
 		M = Integer.parseInt(st.nextToken());
 
 		arr = new int[N];
-		visit = new boolean[N];
-		result = new int[N];
+		tmp = new int[M];
+		check = new boolean[N];
+
 		for (int i = 0; i < N; i++) {
 			arr[i] = i + 1;
 		}
+		
 
 		sb = new StringBuilder();
+		
 		permutation(0);
+
 		System.out.println(sb);
 
 	}
@@ -35,18 +37,17 @@ public class Main {
 	static void permutation(int depth) {
 		if (depth == M) {
 			for (int i = 0; i < M; i++) {
-				sb.append(result[i] + " ");
+				sb.append(tmp[i] + " ");
 			}
 			sb.append("\n");
 			return;
 		}
-
 		for (int i = 0; i < N; i++) {
-			if (!visit[i]) {
-				visit[i] = true;
-				result[depth] = arr[i];
+			if (!check[i]) {
+				check[i] = true;
+				tmp[depth] = arr[i];
 				permutation(depth + 1);
-				visit[i] = false;
+				check[i] = false;
 			}
 		}
 	}
