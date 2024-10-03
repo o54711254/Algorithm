@@ -1,89 +1,62 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
+
+/*
+ * dp 집합에 최소한으로 갈 수 있는 주사위 수 저장 
+ * 재귀를 돌며 1~6까지 경우의수 계속 탐방 
+ * 만약 수가 뱀 or 사다리가 있는 수이면 그 수로 이동 
+ * 뱀 or 사다리는 Map or ArrayList에 저장 
+ * Map 하나만 쓰고 key, value 순으로 저장
+ * 
+ * */
 
 public class Main {
-	static int N, M, cnt;
-	static int start = 1, end = 100;
-	static boolean[] visited;
-	static Map<Integer, Integer> things;
-
-	static class Point {
-		int x, y;
-
-		public Point(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-	}
+	static int[] dp = new int[101];
+	static int N, M;
+	static Map<Integer, Integer> bridge = new HashMap<Integer, Integer>();
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
+		StringTokenizer st;
 
+		st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 
-		visited = new boolean[101];
-		things = new HashMap<>();
-
-		for (int i = 0; i < N; i++) {
+		for (int i = 0; i < N + M; i++) {
 			st = new StringTokenizer(br.readLine());
 			int x = Integer.parseInt(st.nextToken());
 			int y = Integer.parseInt(st.nextToken());
 
-			things.put(x, y);
+			bridge.put(x, y);
 		}
 
-		for (int i = 0; i < M; i++) {
-			st = new StringTokenizer(br.readLine());
-			int x = Integer.parseInt(st.nextToken());
-			int y = Integer.parseInt(st.nextToken());
+		Arrays.fill(dp, Integer.MAX_VALUE);
+		dp[0] = 0;
+		move(1, 0);
 
-			things.put(x, y);
+		System.out.println(dp[100]);
+	}
+
+	static void move(int number, int count) {
+
+		if (number > 100) {
+			return;
 		}
 
-		bfs();
-
-		System.out.println(cnt);
-
-	}// main
-
-	static void bfs() {
-		Queue<Integer> q = new LinkedList<>();
-		q.add(start);
-		visited[start] = true;
-
-		while (!q.isEmpty()) {
-			cnt++;
-			int size = q.size();
-			for (int i = 0; i < size; i++) {
-				int take = q.poll();
-
-				for (int j = 1; j <= 6; j++) {
-					int next = take + j;
-
-					if (next == end)
-						return;
-					if (visited[next])
-						continue;
-
-					visited[next] = true;
-					if (things.containsKey(next)) {
-						next = things.get(next);
-					}
-					q.add(next);
-				}
-
+		// 주사위 수 만
+		for (int i = 1; i <= 6; i++) {
+			int next = number + i;
+			if (bridge.containsKey(next)) {
+				next = bridge.get(next);
 			}
 
-		} // while
+			if (next <= 100 && dp[next] > (count + 1)) {
+				dp[next] = count + 1;
+				move(next, count + 1);
+			}
+		}
 
-	}// bfs
+	}
 
 }
