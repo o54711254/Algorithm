@@ -27,7 +27,7 @@ class Main {
 	static int M;
 
 	static ArrayList<ArrayList<Node>> list = new ArrayList<ArrayList<Node>>();
-	static ArrayList<Root> rootList = new ArrayList<Root>();
+	static int[] arr;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -37,6 +37,8 @@ class Main {
 		st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
+
+		arr = new int[N + 1];
 
 		for (int i = 0; i < N + 1; i++) {
 			list.add(new ArrayList<>());
@@ -73,7 +75,6 @@ class Main {
 		Queue<Integer> queue = new LinkedList<>();
 		queue.add(start);
 
-		int[] arr = new int[N + 1];
 		fillArrMaxValue(arr);
 
 		arr[start] = 0;
