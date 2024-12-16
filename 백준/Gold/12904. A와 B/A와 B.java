@@ -1,66 +1,66 @@
 import java.io.*;
 import java.util.*;
 
-class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        
-        String start = br.readLine();
-        String word = br.readLine();
+/*
+ * B
+ * BA
+ * ABB
+ * ABBA
+ * <==>
+ * 1. 문자열 뒤에 A를 뺀다
+ * 2. 문자열 뒤의 B를 빼고 뒤집는다.
+ * LinkedList로 deque 구현 
+ * 뒤집는건 boolean flag를 통해 구현  
+ * 
+ * 1. ABBA 
+ * 2. ABB (removeLast)
+ * 3. AB(= BA) (removeLast, false) 
+ * 4. */
 
-        System.out.println(solve(start, word) ? 1 : 0);
-    }
-    
-    public static boolean solve(String start, String word) {
-        Deque<Character> deque = new LinkedList<>();
-        for (char c : word.toCharArray()) {
-            deque.add(c);
-        }
-        
-        boolean isForward = true;
-        
-        while (deque.size() > start.length()) {
-            if (isForward) {
-                // 마지막 문자가 'A'인 경우 제거
-                if (deque.peekLast() == 'A') {
-                    deque.removeLast();
-                }
-                // 마지막 문자가 'B'인 경우 뒤집기
-                else if (deque.peekLast() == 'B') {
-                    isForward = false;
-                    deque.removeLast();
-                }
-                else {
-                    return false;
+class Main {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+
+		String start = br.readLine();
+		String word = br.readLine();
+
+		char[] words = word.toCharArray();
+
+		Deque<Character> deque = new LinkedList<Character>();
+
+		for (int i = 0; i < words.length; i++) {
+			deque.add(words[i]);
+		}
+
+		boolean flag = true;
+
+		while (!deque.isEmpty() && deque.size() != start.length()) {
+            if (flag) {
+                if (deque.removeLast() == 'B') {
+                    flag = false; // 뒤집기 상태로 전환
                 }
             } else {
-                // 첫 문자가 'A'인 경우 제거
-                if (deque.peekFirst() == 'A') {
-                    deque.removeFirst();
-                }
-                // 첫 문자가 'B'인 경우 뒤집기
-                else if (deque.peekFirst() == 'B') {
-                    isForward = true;
-                    deque.removeFirst();
-                }
-                else {
-                    return false;
+                if (deque.removeFirst() == 'B') {
+                    flag = true; // 정방향 상태로 전환
                 }
             }
         }
-        
-        // 최종 문자열 비교
-        StringBuilder sb = new StringBuilder();
-        if (isForward) {
-            while (!deque.isEmpty()) {
-                sb.append(deque.removeFirst());
-            }
-        } else {
-            while (!deque.isEmpty()) {
-                sb.append(deque.removeLast());
-            }
-        }
-        
-        return sb.toString().equals(start);
-    }
+
+		StringBuilder sb = new StringBuilder();
+		while (!deque.isEmpty()) {
+			if (flag) {
+				sb.append(deque.removeFirst());
+			} else {
+				sb.append(deque.removeLast());
+			}
+		}
+
+		if (sb.toString().equals(start)) {
+			System.out.println(1);
+		} else {
+			System.out.println(0);
+		}
+	}
 }
