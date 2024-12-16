@@ -1,74 +1,94 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-public class Main {
-	static int[] min;
-	static int[] pre;
-	static int N,K;
-	
+class Spot implements Comparable<Spot> {
+	int idx;
+	int time;
+
+	public Spot(int idx, int time) {
+		this.idx = idx;
+		this.time = time;
+	}
+
+	@Override
+	public int compareTo(Spot o) {
+		return this.time - o.time;
+	}
+}
+
+class Main {
+	static int K;
+	static int INF = 2000000000;
+	static int[] result;
+	static int[] path;
+
+	static StringBuilder sb = new StringBuilder();
+
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		N = Integer.parseInt(st.nextToken());
+		StringTokenizer st;
+
+		st = new StringTokenizer(br.readLine());
+
+		int N = Integer.parseInt(st.nextToken());
 		K = Integer.parseInt(st.nextToken());
-		
-		min = new int[100002];
-		pre = new int[100002];
-		
-		start();
-//		System.out.println(Arrays.toString(min));
-		Stack<Integer> stack = new Stack<>();
-		
-		System.out.println(min[K]-1);
-		
-		int preview = K;
-		while(preview != N) {
-			stack.add(pre[preview]);
-			preview = pre[preview];
-		}
-		
-		while(!stack.isEmpty()) {
-			System.out.printf("%d ",stack.pop());
-		}
-		System.out.printf("%d",K);
+
+		result = new int[100001];
+		path = new int[100001];
+		Arrays.fill(result, INF);
+
+		dijkstra(N);
+		sb.append(result[K]).append("\n");
+		findPath(N, K);
+
+		System.out.println(sb);
 	}
-	
-	static void start() {
-		Queue<Integer> info = new LinkedList<>();
-		
-		min[N] = 1;
-		info.add(N);
-		
-		while(!info.isEmpty()) {
-			int now = info.poll();
-			
-			if(inRange(now*2) && min[now*2] == 0) {
-				min[now*2] = min[now] + 1;
-				pre[now*2] = now;
-				info.add(now*2);
+
+	static void dijkstra(int start) {
+		PriorityQueue<Spot> pq = new PriorityQueue<Spot>();
+		pq.add(new Spot(start, 0));
+		result[start] = 0;
+
+		while (!pq.isEmpty()) {
+			Spot now = pq.poll();
+
+			if (now.idx == K) {
+				return;
 			}
-			
-			if(inRange(now-1) && min[now-1] == 0) {
-				min[now-1] = min[now] + 1;
-				pre[now - 1] = now;
-				info.add(now-1);
+
+			if (now.idx + 1 <= 100000 && result[now.idx + 1] > result[now.idx] + 1) {
+				result[now.idx + 1] = result[now.idx] + 1;
+				path[now.idx + 1] = now.idx;
+				pq.add(new Spot(now.idx + 1, result[now.idx] + 1));
 			}
-			
-			if(inRange(now+1) && min[now+1] == 0) {
-				min[now+1] = min[now] + 1;
-				pre[now + 1] = now;
-				info.add(now+1);
+
+			if (now.idx - 1 >= 0 && result[now.idx - 1] > result[now.idx] + 1) {
+				result[now.idx - 1] = result[now.idx] + 1;
+				path[now.idx - 1] = now.idx;
+				pq.add(new Spot(now.idx - 1, result[now.idx] + 1));
 			}
+
+			if (now.idx * 2 <= 100000 && result[now.idx * 2] > result[now.idx] + 1) {
+				result[now.idx * 2] = result[now.idx] + 1;
+				path[now.idx * 2] = now.idx;
+				pq.add(new Spot(now.idx * 2, result[now.idx] + 1));
+			}
+
 		}
 	}
-	
-	static boolean inRange(int i) {
-		return 0 <= i && i <= 100000;
+
+	static void findPath(int start, int destination) {
+		int temp = destination;
+		Stack<Integer> stack = new Stack<Integer>();
+		stack.add(temp);
+
+		while (temp != start) {
+			stack.add(path[temp]);
+			temp = path[temp];
+		}
+
+		while (!stack.isEmpty()) {
+			sb.append(stack.pop()).append(" ");
+		}
 	}
 }
