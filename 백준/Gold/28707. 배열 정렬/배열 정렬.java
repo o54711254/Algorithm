@@ -48,8 +48,6 @@ class Main {
 	static List<Path> pathList = new ArrayList<>();
 	static Map<Integer, Integer> map = new HashMap<>();
 
-	static StringBuilder sb;
-
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
@@ -134,10 +132,10 @@ class Main {
 	}
 
 	static int getNumber(int[] numbers) {
-		sb = new StringBuilder();
-		for (int num : numbers) {
-			sb.append(num);
-		}
-		return Integer.parseInt(sb.toString());
+	    int result = 0;
+	    for (int num : numbers) {
+	        result = result * 10 + num;
+	    }
+	    return result;
 	}
 }
