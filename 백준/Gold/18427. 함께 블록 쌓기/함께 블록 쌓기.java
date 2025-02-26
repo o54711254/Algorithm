@@ -41,7 +41,7 @@ class Main {
 			}
 
 			List<Integer> student = blockList.get(i);
-			for (int j = 0; j <= H; j++) {
+			for (int j = H; j >= 0; j--) {
 				if (dp[i - 1][j] > 0) {
 					for (int num : student) {
 						if (j + num <= H) {
