@@ -10,21 +10,21 @@ class Solution {
             return false;
         }
         
-        Queue<Character> queue = new LinkedList<>();
+        Stack<Character> stack = new Stack<>();
         
         for(char now : arr){
             if(now == '('){
-                queue.add(now);    
+                stack.push(now);    
             }else{
-                if(queue.isEmpty()){
+                if(stack.isEmpty()){
                     return false;
                 }else{
-                    queue.poll();
+                    stack.pop();
                 }
             }
         }
         
-        if(queue.isEmpty()){
+        if(stack.isEmpty()){
             return true;
         }else{
             return false;
