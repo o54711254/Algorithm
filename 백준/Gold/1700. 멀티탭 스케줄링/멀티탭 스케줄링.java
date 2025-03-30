@@ -41,9 +41,15 @@ class Main {
 
 			// 멀티탭에 꽂혀있는것 중에 앞으로 안쓸거 체크
 			boolean use = true;
-//			for (int i = 0; i < list.size(); i++) {
-//				if()
-//			}
+			for (int plug : multitab) {
+			    if (!list.contains(plug)) {
+			        multitab.remove(plug);
+			        multitab.add(now);
+			        count++;
+			        use = false; 
+			        break;
+			    }
+			}
 
 			// 모두다 쓰면 가장 앞에서부터 나중에 등장하는거 지우기
 			if (use) {
