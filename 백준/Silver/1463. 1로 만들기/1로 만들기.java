@@ -1,20 +1,17 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
-	static int[] dp = new int[1000001];
+class Main {
 	static int N;
+	static final int INF = 200000000;
+	static int[] dp;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-
 		N = Integer.parseInt(br.readLine());
 
-		for (int i = 0; i < 1000001; i++) {
-			dp[i] = 987654321;
-		}
-		dp[0] = 0;
+		dp = new int[1000001];
+		Arrays.fill(dp, INF);
 		dp[1] = 0;
 
 		for (int i = 1; i <= N; i++) {
@@ -31,5 +28,4 @@ public class Main {
 
 		System.out.println(dp[N]);
 	}
-
 }
