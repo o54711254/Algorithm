@@ -10,8 +10,8 @@ class Solution {
         for(char now : arr){
             sb.append(now);
         }
-        sb.reverse();
-        long answer = Long.parseLong(sb.toString());
+        
+        long answer = Long.parseLong(sb.reverse().toString());
         return answer;
     }
 }
